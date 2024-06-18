@@ -4,19 +4,19 @@
 This repository contains Python scripts to interact with [SLURM]([url](https://slurm.schedmd.com/quickstart.html)) clusters, specifically for querying partition and node information.
 Files
 
-    chknodes.py: The main script to run the program from the command line. It allows users to specify a SLURM partition name and retrieves detailed node information.
+chknodes.py: The main script to run the program from the command line. It allows users to specify a SLURM partition name and retrieves detailed node information.
 
-    slurm_functions.py: Contains modular functions for querying SLURM partitions and nodes using subprocess calls to scontrol commands. Functions include:
-        get_available_partitions(): Retrieves a list of available SLURM partitions.
-        get_partition_info(partition_name): Retrieves detailed information about a specific SLURM partition.
-        get_node_info(node_list): Retrieves information about nodes in a given SLURM partition.
+slurm_functions.py: Contains modular functions for querying SLURM partitions and nodes using subprocess calls to scontrol commands. Functions include:
+    get_available_partitions(): Retrieves a list of available SLURM partitions.
+    get_partition_info(partition_name): Retrieves detailed information about a specific SLURM partition.
+    get_node_info(node_list): Retrieves information about nodes in a given SLURM partition.
 
 # Usage
 Running the Program
 
 To use chknodes, execute main.py from the bash command line with a SLURM partition name:
 
-./chknodes.py {partition_name}
+    ./chknodes.py {partition_name}
 
 Replace {partition_name} with the name of the SLURM partition you want to inspect.
 

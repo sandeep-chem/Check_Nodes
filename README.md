@@ -1,4 +1,4 @@
-#chknodes
+# chknodes
 Overview
 
 This repository contains Python scripts to interact with [SLURM]([url](https://slurm.schedmd.com/quickstart.html)) clusters, specifically for querying partition and node information.

@@ -32,5 +32,3 @@ SLURM cluster with scontrol command accessible from the environment where the sc
 # License
 
 This project is licensed under the GPL 3.0 License.
-
-Sandeep Dash

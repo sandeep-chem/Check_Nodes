@@ -22,14 +22,14 @@ Replace {partition_name} with the name of the SLURM partition you want to inspec
 
 # Functionality
 
-    Partition Information: Retrieves and displays details about the selected SLURM partition, including node names and their current status (e.g., CPU allocation, efficiency, and load).
+Partition Information: Retrieves and displays details about the selected SLURM partition, including node names and their current status (e.g., CPU allocation, efficiency, and load).
 
-    Interactive Selection: If no partition name is provided as an argument, the program interactively lists available partitions and prompts the user to select one.
+Interactive Selection: If no partition name is provided as an argument, the program interactively lists available partitions and prompts the user to select one.
 
 # Requirements
 
-    Python 3
-    SLURM cluster with scontrol command accessible from the environment where the script is executed.
+Python 3
+SLURM cluster with scontrol command accessible from the environment where the script is executed.
 
 # License
 

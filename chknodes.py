@@ -1,121 +1,18 @@
 #!/usr/bin/env python3
 
 import sys
-import subprocess
+from slurm_functions import get_available_partitions, get_partition_info, get_node_info
 
-def get_available_partitions():
+def select_partition(partition_names):
     """
-    Retrieves a list of available SLURM partitions from scontrol.
-
-    Returns:
-        A list of dictionaries, each containing partition information.
-    """
-    command = 'scontrol show partitions'
-    output = subprocess.run(command, shell=True, capture_output=True, text=True)
-
-    if output.returncode != 0:
-        print("Failed to retrieve available partitions.")
-        print(f"Command: {command}")
-        print(output.stderr)
-        return []
-
-    partition_info = []
-    current_partition = {}
-    output_lines = output.stdout.splitlines()
-    for line in output_lines:
-        if line.startswith("PartitionName="):
-            if current_partition:
-                partition_info.append(current_partition)
-                current_partition = {}
-
-        segments = line.split()
-        for segment in segments:
-            if '=' in segment:
-                key, value = segment.split('=', 1)
-                current_partition[key.strip()] = value.strip()
-
-    if current_partition:
-        partition_info.append(current_partition)
-
-    return partition_info
-
-def get_partition_info(partition_name):
-    """
-    Retrieves SLURM partition information for a given partition name.
+    Prompts user to select a SLURM partition.
 
     Args:
-        partition_name (str): Name of the SLURM partition.
+        partition_names (list): List of dictionaries containing partition information.
 
     Returns:
-        A dictionary containing partition information.
+        The name of the selected partition (str).
     """
-    command = f'scontrol show partition {partition_name}'
-    output = subprocess.run(command, shell=True, capture_output=True, text=True)
-    
-    if output.returncode != 0:
-        print(f"Failed to get partition information for partition '{partition_name}'.")
-        print(f"Command: {command}")
-        print(output.stderr)
-        return None
-
-    partition_info = {}
-    output_lines = output.stdout.splitlines()
-    for line in output_lines:
-        segments = line.split()
-        for segment in segments:
-            if '=' in segment:
-                key, value = segment.split('=', 1)
-                partition_info[key.strip()] = value.strip()
-
-    return partition_info
-
-def get_node_info(node_list):
-    """
-    Retrieves SLURM node information for a given node list.
-
-    Args:
-        node_list (str): Comma-separated list of node names.
-
-    Returns:
-        A list of dictionaries, each containing node information.
-    """
-    command = f'scontrol show node {node_list}'
-    output = subprocess.run(command, shell=True, capture_output=True, text=True)
-
-    if output.returncode != 0:
-        print("Failed to get node information.")
-        print(f"Command: {command}")
-        print(output.stderr)
-        return None
-
-    node_info = []
-    current_node = {}
-    output_lines = output.stdout.splitlines()
-    for line in output_lines:
-        if line.startswith("NodeName="):
-            if current_node:
-                node_info.append(current_node)
-                current_node = {}
-
-        segments = line.split()
-        for segment in segments:
-            if '=' in segment:
-                key, value = segment.split('=', 1)
-                current_node[key.strip()] = value.strip()
-
-    if current_node:
-        node_info.append(current_node)
-
-    return node_info    
-
-if __name__ == "__main__":
-    # Get available partition names
-    partition_names = get_available_partitions()
-
-    if not partition_names:
-        print("No partitions available.")
-        sys.exit(1)
-
     selected_partition = None
 
     if len(sys.argv) > 1:
@@ -153,6 +50,20 @@ if __name__ == "__main__":
             except ValueError:
                 print("Invalid input. Please enter a valid number.")
 
+    return selected_partition
+
+def main():
+    # Get available partition names
+    partition_names = get_available_partitions()
+
+    if not partition_names:
+        print("No partitions available.")
+        sys.exit(1)
+
+    # Select a partition
+    selected_partition = select_partition(partition_names)
+
+    # Get information for the selected partition
     selected_partition_info = get_partition_info(selected_partition)
 
     if selected_partition_info:
@@ -167,3 +78,6 @@ if __name__ == "__main__":
                 for node in node_info:
                     node_info_str = " | ".join(f"{key} = {node.get(key, '')}" for key in keys)
                     print(node_info_str)
+
+if __name__ == "__main__":
+    main()
